@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+
+<head>
+    <title th:text="${board.title} + ' - 게시글 상세'"></title>
+</head>
+
+<body>
+    <div layout:fragment="content">
+
+        <div class="post-container">
+            
+            <div class="post-header">
+                <h2 class="post-title" th:text="${board.title}"></h2>
+                <div class="post-meta">
+                    <span th:text="'작성자: ' + ${board.authorNickname}"></span>
+                    <span th:text="'작성일: ' + ${#temporals.format(board.createdAt, 'yyyy-MM-dd HH:mm')}"></span>
+                    <span th:text="'조회수: ' + ${board.viewCount}"></span>
+                </div>
+            </div>
+
+            <div class="post-content" th:text="${board.content}">
+            </div>
+
+            <div class="button-area">
+                <a th:href="@{/board/list}" class="btn btn-list">목록으로</a>
+                
+                <th:block th:if="${currentUserId != null AND board.authorId == currentUserId}">
+                    
+                    <a th:href="@{/board/edit/{id}(id=${board.id})}" class="btn btn-edit">수정</a>
+
+                    <form th:action="@{/board/delete}" method="post" class="inline-form" 
+                          onsubmit="return confirm('정말 삭제하시겠습니까?');">
+                        <input type="hidden" name="id" th:value="${board.id}" /> 
+                        <button type="submit" class="btn btn-delete">삭제</button>
+                    </form>
+                    
+                </th:block>
+            </div>
+
+        </div>
+
+    </div>
+</body>
+</html>

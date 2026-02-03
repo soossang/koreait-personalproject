@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}"> <head>
+    <title>자유게시판</title>
+    
+    </head>
+
+<div layout:fragment="content">
+
+    <div class="board-container">
+        
+        <div class="board-header">
+            <h2>자유게시판</h2>
+            <a th:href="@{/board/write}" class="btn btn-write">글쓰기</a> </div>
+
+        <table class="board-table">
+            <thead>
+                <tr>
+                    <th class="col-id">번호</th>
+                    <th class="col-title">제목</th>
+                    <th class="col-author">닉네임</th>
+                    <th class="col-date">작성일</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:if="${#lists.isEmpty(boards)}">
+                    <td colspan="4" style="text-align: center; padding: 50px; color: #888;">
+                        등록된 게시글이 없습니다.
+                    </td>
+                </tr>
+                
+                <tr th:each="board : ${boards}">
+                    <td class="col-id" th:text="${board.id}">1</td>
+                    <td class="col-title">
+                        <a th:href="@{/board/detail/{id}(id=${board.id})}"
+                           th:text="${board.title}"
+                           class="board-title-link">
+                           게시글 제목입니다.
+                        </a>
+                    </td>
+                    <td class="col-author" th:text="${board.authorNickname}">park</td>
+                    <td class="col-date" 
+                        th:text="${#temporals.format(board.createdAt, 'yyyy-MM-dd')}">
+                        2025-10-21
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        </div>
+    </div>
+</html>

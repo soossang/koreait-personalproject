@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.koreait.PsnProject.dao.NoticeDAO">
+
+    <resultMap id="noticeResultMap" type="com.koreait.PsnProject.dto.NoticeDTO">
+        <id property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="content" column="content"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="adminId" column="admin_id"/>
+    </resultMap>
+
+    <insert id="insertNotice" parameterType="com.koreait.PsnProject.dto.NoticeDTO">
+        INSERT INTO notice
+            (
+             title,
+             content,
+             admin_id  -- DB 컬럼 이름
+             -- , created_at -- DB에서 자동으로 생성된다면 생략 가능
+            )
+        VALUES
+            (
+             #{title},
+             #{content},
+             #{adminId} -- NoticeDTO의 adminId 필드 값
+            )
+    </insert>
+
+    <select id="getAllNotices" resultMap="noticeResultMap">
+        SELECT
+            id, title, content, created_at, admin_id
+        FROM notice
+        ORDER BY created_at DESC
+    </select>
+
+    <select id="getNoticeById" parameterType="long" resultMap="noticeResultMap">
+        SELECT
+            id, title, content, created_at, admin_id
+        FROM notice
+        WHERE id = #{id}
+    </select>
+
+    <update id="updateNotice" parameterType="com.koreait.PsnProject.dto.NoticeDTO">
+        UPDATE notice
+        SET
+            title = #{title},
+            content = #{content}
+            -- , updated_at = NOW() -- 수정 시각 업데이트 (DB 컬럼 필요)
+        WHERE id = #{id}
+        </update>
+
+    <delete id="deleteNotice" parameterType="long">
+        DELETE FROM notice WHERE id = #{id}
+    </delete>
+
+</mapper>

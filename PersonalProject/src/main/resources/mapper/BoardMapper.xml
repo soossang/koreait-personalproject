@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.koreait.PsnProject.dao.BoardDAO">
+
+    <resultMap id="boardResultMap" type="com.koreait.PsnProject.dto.BoardDTO">
+        <id property="id" column="board_id"/> <result property="authorId" column="member_id"/>
+        <result property="title" column="title"/>
+        <result property="content" column="content"/>
+        <result property="viewCount" column="view_count"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+        <result property="authorNickname" column="author_nickname"/>
+    </resultMap>
+
+    <select id="getBoardList" resultMap="boardResultMap">
+        SELECT
+            b.id          as board_id,     -- 별칭 사용 (id 중복 방지)
+            b.member_id,
+            b.title,
+            b.content,
+            b.view_count, -- DB 컬럼명이 view_count라고 가정 (아니면 수정 필요)
+            b.created_at,
+            b.updated_at,
+            m.nickname    as author_nickname -- member 테이블의 nickname 가져오기
+        FROM board b
+        JOIN member m ON b.member_id = m.id -- member 테이블과 JOIN
+        ORDER BY b.created_at DESC
+        </select>
+
+    <select id="getBoardById" parameterType="long" resultMap="boardResultMap">
+        SELECT
+            b.id          as board_id,
+            b.member_id,
+            b.title,
+            b.content,
+            b.view_count,
+            b.created_at,
+            b.updated_at,
+            m.nickname    as author_nickname
+        FROM board b
+        JOIN member m ON b.member_id = m.id
+        WHERE b.id = #{id}
+    </select>
+
+    <insert id="insertBoard" parameterType="com.koreait.PsnProject.dto.BoardDTO">
+    	INSERT INTO board (member_id, title, content)
+    	VALUES (#{authorId}, #{title}, #{content})
+	</insert>
+    
+    <update id="updateBoard" parameterType="com.koreait.PsnProject.dto.BoardDTO">
+        UPDATE board
+        SET title = #{title}, content = #{content}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteBoard" parameterType="long">
+        DELETE FROM board WHERE id = #{id}
+    </delete>
+
+    <select id="getTotalCount" resultType="int">
+        SELECT COUNT(*) FROM board
+    </select>
+
+    <select id="getBoardsByAuthor" parameterType="long" resultMap="boardResultMap">
+        SELECT
+            b.id          as board_id,
+            b.member_id,
+            b.title,
+            b.content,
+            b.view_count,
+            b.created_at,
+            b.updated_at,
+            m.nickname    as author_nickname
+        FROM board b
+        JOIN member m ON b.member_id = m.id
+        WHERE b.member_id = #{authorId}
+        ORDER BY b.created_at DESC
+    </select>
+
+</mapper>

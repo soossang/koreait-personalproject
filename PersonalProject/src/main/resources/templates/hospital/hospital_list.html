@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>병원 목록</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=8f4dacf22963ea0d7cbcad6733464a28&libraries=services,places,geometry"></script>
+
+</head>
+<body>
+<div th:replace="~{fragments/header :: header}"></div>
+
+<div class="container">
+    <h2>병원 찾기 (대전)</h2>
+    <div class="search-container">
+        <input type="text" id="searchInput" placeholder="병원 이름을 입력하고 Enter를 누르세요...">
+    </div>
+    <div id="map" class="map_wrap" style="width:100%; height:500px; border-radius: 8px; margin-bottom: 20px;"></div>
+    <h3>병원 목록</h3>
+    <ul id="hospitalList"></ul>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+
+    // --- 전역 변수 ---
+    const allHospitalData = /*[[${hospitals}]]*/ [];
+    const mapContainer = document.getElementById('map');
+    let map;
+    let dbMarkers = [];
+    let currentInfowindow = null;
+    let geocoder;
+    let places;
+
+    console.log("[DEBUG] Initial hospital data:", JSON.stringify(allHospitalData));
+
+    // --- 지도 초기화 (DOM 로드 후 실행) ---
+    document.addEventListener("DOMContentLoaded", function() {
+        console.log("[DEBUG] DOMContentLoaded. Initializing Map...");
+        if (!mapContainer) { console.error("### FATAL: Map container not found!"); return; }
+
+        if (typeof kakao === 'undefined' || !kakao.maps /*...등등*/) { /* API 로딩 실패 처리 */ return; }
+
+        try {
+            const mapOption = { center: new kakao.maps.LatLng(36.3504119, 127.3845475), level: 5 };
+            map = new kakao.maps.Map(mapContainer, mapOption);
+            geocoder = new kakao.maps.services.Geocoder();
+            places = new kakao.maps.services.Places();
+            initializeMap(); // 초기화 함수 호출
+        } catch (error) { console.error("### ERROR init:", error); alert("지도 초기화 오류: " + error.message); }
+    });
+
+    // --- 함수 정의 ---
+
+    function clearMapElements() { /* ... */ }
+
+    /** DB 병원 데이터 마커 표시 및 클릭 이벤트 추가 (★ 인포윈도우 내용 생성 재확인 ★) */
+    function displayDbHospitalMarkers(hospitalsToShow) {
+        console.log(`[MARKER DISPLAY] Starting display with ${hospitalsToShow ? hospitalsToShow.length : 0} items.`);
+        clearMapElements();
+        const bounds = new kakao.maps.LatLngBounds();
+        let markerAdded = false;
+
+        if (!map || !hospitalsToShow || hospitalsToShow.length === 0) { /* ... */ return; }
+
+        hospitalsToShow.forEach(function(hospital, index) {
+            let lat = hospital?.latitude; let lng = hospital?.longitude; let name = hospital?.hospitalName;
+            let isValidCoord = typeof lat === 'number' && !isNaN(lat) && typeof lng === 'number' && !isNaN(lng);
+
+            if (isValidCoord && name) {
+                try {
+                    const markerPosition = new kakao.maps.LatLng(lat, lng);
+                    const marker = new kakao.maps.Marker({ map: map, position: markerPosition });
+                    dbMarkers.push(marker); bounds.extend(markerPosition); markerAdded = true;
+                    console.log(`[MARKER ${index + 1}] SUCCESS: Marker for '${name}' added.`);
+
+                    // ★ 마커 클릭 이벤트 리스너 (정보창 내용 생성 확인) ★
+                    kakao.maps.event.addListener(marker, 'click', (function(hospitalData) { // 클로저 사용
+                        return function() {
+                            console.log(`[MARKER CLICK] Clicked: ${hospitalData.hospitalName}`);
+                            if (currentInfowindow) currentInfowindow.close();
+
+                            // ★ 정보창 내용 HTML 생성 (변수 접근 확인) ★
+                            // hospitalData 객체 내부의 속성에 접근하는지 확인
+                            console.log("[DEBUG] Creating infowindow content. Data:", hospitalData);
+                            const content = `
+                                <div class="info-window-content" style="padding:10px; width:250px;">
+                                    <!-- <button class="close-btn" onclick="closeInfowindow()" title="닫기"></button> -->
+                                    <div style="font-weight:bold; font-size:14px; margin-bottom:5px;">${hospitalData.hospitalName || '이름 없음'}</div>
+                                    <div style="font-size:12px; color:#666; margin-bottom:3px;">${hospitalData.address || '주소 정보 없음'}</div>
+                                    <div style="font-size:12px; color:#009900; margin-bottom:8px;">${hospitalData.phone || '전화번호 없음'}</div>
+                                    <div style="font-size:12px; color:#555; margin-bottom:5px; max-height: 40px; overflow: hidden; text-overflow: ellipsis; white-space: normal;">${hospitalData.description}</div>
+                                    <div style="font-size:11px; color:#888;">
+                                    <span>의사: ${hospitalData.doctorCount}</span>
+                                    <span style="margin-left: 10px;">평점: ${hospitalData.avgRating}</span>
+                                </div>
+                                </div>`;
+                            console.log("[DEBUG] Infowindow content HTML:", content); // 생성된 HTML 로그
+
+                            try {
+                                currentInfowindow = new kakao.maps.InfoWindow({
+                                    position: markerPosition, // 마커 위치 사용
+                                    content: content,
+                                    removable: true
+                                });
+                                currentInfowindow.open(map, marker);
+                                console.log("[DEBUG] Infowindow opened for:", hospitalData.hospitalName);
+                            } catch(infoError) { console.error("### ERROR creating/opening infowindow:", infoError); }
+                        };
+                    })(hospital)); // 클로저에 현재 hospital 객체 전달 확인
+
+                } catch (error) { console.error(`### ERROR processing marker ${index + 1}:`, error); }
+            } else { console.warn(`[DEBUG] Skipping invalid data for marker ${index + 1}.`); }
+        });
+
+        console.log("[DEBUG] Finished loop for DB markers.");
+        if (markerAdded && hospitalsToShow.length >= 1) {
+			map.setBounds(bounds);
+		}
+        else if (!markerAdded) { resetMapCenter(); }
+    }
+
+    function resetMapCenter() { /* ... */ }
+    function handleMapClick(mouseEvent) { /* ... */ }
+    function searchDetailAddrFromCoords(coords, callback) { /* ... */ }
+    function displaySimpleInfowindow(latlng, address, placeName) { /* ... */ }
+    function closeInfowindow() { /* ... */ }
+    function findClosestPlace(clickPos, placesData) { /* ... */ }
+
+    /** 병원 이름 검색 처리 (★ 목록/마커 업데이트 호출 확인 ★) */
+    function performSearch() {
+        const keyword = document.getElementById('searchInput').value.trim().toLowerCase();
+        console.log(`[SEARCH] Keyword: "${keyword}"`);
+        clearMapElements();
+
+        let filteredHospitals = [];
+        if (keyword && allHospitalData && allHospitalData.length > 0) {
+            filteredHospitals = allHospitalData.filter(h => h && h.hospitalName && h.hospitalName.toLowerCase().includes(keyword));
+            console.log(`[SEARCH] Found ${filteredHospitals.length} hospitals.`);
+        } else if (!keyword) {
+            filteredHospitals = allHospitalData;
+        }
+
+        // ★★★ 목록과 마커 업데이트 함수 호출 확인 ★★★
+        console.log("[SEARCH] Calling updateHospitalList...");
+        updateHospitalList(filteredHospitals);
+        console.log("[SEARCH] Calling displayDbHospitalMarkers...");
+        displayDbHospitalMarkers(filteredHospitals);
+        
+        // 검색 결과 1개일 때 지도 이동
+        if (filteredHospitals.length === 1) {
+			// 디버그코드
+			console.log("병원 1개 검색 시.........");
+			
+            const target = filteredHospitals[0];
+            if (target && typeof target.latitude === 'number' && typeof target.longitude === 'number') {
+                const moveLatLng = new kakao.maps.LatLng(target.latitude, target.longitude);
+                console.log("[SEARCH] Moving map to single result:", target.hospitalName);
+                map.panTo(moveLatLng); map.setLevel(3);
+            }
+        } else if (filteredHospitals.length === 0) {
+             resetMapCenter(); // 검색 결과 없으면 리셋
+        }
+        console.log("[SEARCH] Process finished.");
+    }
+    
+    function moveHospitalMap(name) {
+    	let filteredHospitals;
+        if (name && allHospitalData && allHospitalData.length > 0) {
+            filteredHospitals = allHospitalData.filter(h => h && h.hospitalName && h.hospitalName.toLowerCase().includes(name));
+            console.log(`[SEARCH] Found ${filteredHospitals.length} hospitals.`);
+        } else if (!keyword) {
+            filteredHospitals = allHospitalData;
+        }
+
+        // ★★★ 목록과 마커 업데이트 함수 호출 확인 ★★★
+        console.log("[SEARCH] Calling updateHospitalList...");
+        updateHospitalList(filteredHospitals);
+        console.log("[SEARCH] Calling displayDbHospitalMarkers...");
+        displayDbHospitalMarkers(filteredHospitals);
+        
+        // 검색 결과 1개일 때 지도 이동
+        if (filteredHospitals.length === 1) {
+			// 디버그코드
+			console.log("병원 1개 검색 시.........");
+			
+            const target = filteredHospitals[0];
+            if (target && typeof target.latitude === 'number' && typeof target.longitude === 'number') {
+                const moveLatLng = new kakao.maps.LatLng(target.latitude, target.longitude);
+                console.log("[SEARCH] Moving map to single result:", target.hospitalName);
+                map.panTo(moveLatLng); map.setLevel(3);
+            }
+        } else if (filteredHospitals.length === 0) {
+             resetMapCenter(); // 검색 결과 없으면 리셋
+        }
+        console.log("[SEARCH] Process finished.");
+
+    }
+    /** HTML 병원 목록 업데이트 함수 (★ 최종 점검 ★) */
+    function updateHospitalList(hospitalsToList) {
+        console.log(`[LIST UPDATE] Starting update with ${hospitalsToList ? hospitalsToList.length : 0} items.`);
+        const listElement = document.getElementById('hospitalList');
+        if (!listElement) { console.error("### FATAL: Cannot find #hospitalList!"); return; }
+
+        listElement.innerHTML = ''; // 목록 비우기
+
+        if (!hospitalsToList || hospitalsToList.length === 0) {
+             const message = (!allHospitalData || allHospitalData.length === 0) ? '등록된 병원 정보가 없습니다.' : '검색 결과가 없습니다.';
+             listElement.innerHTML = `<li>${message}</li>`;
+             console.log("[LIST UPDATE] List updated with message:", message);
+             return;
+        }
+
+        console.log("[LIST UPDATE] Starting loop to create list items...");
+        try {
+            hospitalsToList.forEach(function(hospital, index) {
+                // 데이터 유효성 검사
+                if (!hospital || hospital.id === undefined || !hospital.hospitalName) {
+                    console.warn(`[LIST UPDATE] Skipping invalid item at index ${index}.`); return;
+                }
+                // ★ 요소 생성 및 내용 설정 (textContent) ★
+                const listItem = document.createElement('li');
+                
+                let html = `
+                <p class='hospital-list' onclick='moveHospitalMap("${hospital.hospitalName}")'>${hospital.hospitalName} - 
+                	<span>${hospital.address}</span>
+                </p>
+                `;
+                listItem.innerHTML = html;
+                /*
+                const link = document.createElement('a');
+                link.href = `/hospital/detail/${hospital.id}`;
+                link.textContent = hospital.hospitalName; // Use textContent
+                const addressSpan = document.createElement('span');
+                // ★ 주소 값 확인 및 설정 ★
+                const addressText = hospital.address ? hospital.address : '주소 정보 없음';
+                addressSpan.textContent = ' - ' + addressText; // Use textContent
+
+                // ★ 요소 추가 ★
+                listItem.appendChild(link);
+                listItem.appendChild(addressSpan);
+                */
+                listElement.appendChild(listItem); // ★★★ 여기가 실제로 목록에 추가되는 부분 ★★★
+            });
+            console.log("[LIST UPDATE] Finished loop successfully.");
+        } catch (error) {
+            console.error("### ERROR during list item creation:", error);
+            listElement.innerHTML = '<li>목록 생성 중 오류 발생.</li>';
+        }
+    }
+
+
+    /** 지도 초기화 함수 (★ 최종 점검 ★) */
+    function initializeMap() {
+        console.log("[DEBUG] Running initializeMap function...");
+        if (!map || !geocoder || !places) { /* ... 객체 확인 ... */ return; }
+
+        // 이벤트 리스너 등록
+        kakao.maps.event.addListener(map, 'click', handleMapClick);
+        const searchInput = document.getElementById('searchInput');
+        if (!searchInput) { console.error("### FATAL: Search input #searchInput not found!"); return; }
+        searchInput.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') { event.preventDefault(); performSearch(); }
+        });
+        searchInput.disabled = false;
+        console.log("[DEBUG] Event listeners added.");
+
+        // ★★★ 초기 목록 및 마커 업데이트 함수 호출 확인 ★★★
+        console.log("[DEBUG] Calling updateHospitalList for initial display...");
+        updateHospitalList(allHospitalData); // <<< 목록 업데이트
+        if (allHospitalData && allHospitalData.length > 0) {
+             console.log("[DEBUG] Initial data exists, calling displayDbHospitalMarkers...");
+             displayDbHospitalMarkers(allHospitalData); // <<< 마커 표시
+        } else {
+             console.warn("[DEBUG] No initial DB hospital data.");
+        }
+        console.log("[DEBUG] Map initialization complete.");
+    }
+
+    /*]]>*/
+</script>
+
+</body>
+</html>

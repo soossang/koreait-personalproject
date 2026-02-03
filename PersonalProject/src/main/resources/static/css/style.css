@@ -1,0 +1,438 @@
+/* =========================================
+   1. 글로벌 기본 설정 (초기화 및 공통)
+   ========================================= */
+
+/* 기본 스타일 초기화 */
+body, html, h1, h2, h3, p, ul, li, form, input, textarea, button {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; 
+}
+
+/* body, html 기본 폰트 및 배경색 설정 */
+html, body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background-color: #f4f7f6; 
+    color: #333;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+}
+
+/* 고정 헤더로 인해 본문이 가려지지 않도록 body에 상단 패딩 추가 */
+body {
+    padding-top: 80px; 
+}
+
+/* 공통 링크 스타일 */
+a {
+    text-decoration: none;
+    color: inherit; 
+}
+
+a:hover {
+	color: blue;
+	font-weight: bold;
+}
+/* =========================================
+   2. 헤더 (fragments/header.html)
+   ========================================= */
+
+.main-header {
+    background-color: #ffffff; 
+    border-bottom: 1px solid #eaeaea; 
+    padding: 0 5%; 
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 80px; 
+    z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05); 
+}
+
+.logo-area {
+    display: flex;
+    align-items: center; 
+    text-decoration: none !important; 
+}
+
+.logo-icon {
+    font-size: 32px; 
+    margin-right: 12px;
+}
+
+.logo-title {
+    font-family: 'Noto Sans KR', sans-serif; 
+    font-size: 24px;
+    font-weight: 700;
+    color: #007bff; 
+    margin: 0; 
+    text-decoration: none; 
+}
+
+.main-nav ul {
+    margin: 0; padding: 0; list-style: none; 
+}
+.main-nav li {
+    display: inline-block; 
+    margin-left: 30px; 
+}
+.main-nav li a {
+    text-decoration: none; color: #555; 
+    font-size: 17px; font-weight: 500;
+    padding-bottom: 5px; 
+    transition: color 0.3s, border-color 0.3s;
+    border-bottom: 2px solid transparent; 
+}
+.main-nav li a:hover {
+    color: #007bff; border-bottom-color: #007bff; 
+}
+.main-nav li.nav-auth a {
+     color: #007bff; font-weight: 700;
+}
+.main-nav li.nav-auth a:hover {
+     color: #0056b3; border-bottom-color: #0056b3;
+}
+
+/* =========================================
+   3. 푸터 (fragments/footer.html)
+   ========================================= */
+
+footer {
+    text-align: center; padding: 20px;
+    margin-top: 30px; background: #333; color: #fff;
+}
+
+/* =========================================
+   4. 메인 컨텐츠 영역 (layout.html)
+   ========================================= */
+
+.container {
+    width: 90%; max-width: 1100px; 
+    margin: 40px auto; 
+    padding: 0; 
+}
+
+/* =========================================
+   5. 게시판 공통 컨테이너 (흰색 카드)
+   ========================================= */
+
+.board-container,
+.post-container,
+.form-container {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    padding: 30px 35px;
+}
+
+/* =========================================
+   6. 게시판 목록 (board_list.html)
+   ========================================= */
+
+.board-header {
+    display: flex; justify-content: space-between; align-items: center;
+    border-bottom: 2px solid #e0e0e0; padding-bottom: 15px; margin-bottom: 20px;
+}
+.board-header h2 {
+    margin: 0; color: #333; font-size: 22px;
+}
+
+.board-table {
+    width: 100%; border-collapse: collapse; font-size: 15px;
+}
+.board-table th, .board-table td {
+    padding: 14px 10px; border-bottom: 1px solid #e9e9e9; text-align: left;
+}
+.board-table th {
+    background-color: #f9f9f9; color: #555; font-weight: 700; border-top: 2px solid #f0f0f0;
+}
+.col-id, .col-date { text-align: center; color: #777; width: 10%; }
+.col-author { text-align: center; color: #555; width: 15%; }
+.col-title { width: 55%; }
+.board-title-link { text-decoration: none; color: #007bff; font-weight: 500; }
+.board-title-link:hover { text-decoration: underline; }
+.board-table tbody tr:hover { background-color: #fcfcfc; }
+
+/* =========================================
+   7. 게시판 상세 (board_detail.html)
+   ========================================= */
+
+.post-header {
+    border-bottom: 2px solid #f0f0f0; padding-bottom: 20px; margin-bottom: 30px;
+}
+.post-title {
+    font-size: 28px; font-weight: 700; color: #222; margin: 0 0 15px 0;
+}
+.post-meta { font-size: 14px; color: #888; }
+.post-meta span { margin-right: 15px; }
+.post-content {
+    min-height: 250px; font-size: 16px; line-height: 1.8; 
+    color: #444; padding-bottom: 30px; white-space: pre-wrap; 
+}
+
+/* =========================================
+   8. 글쓰기/수정 (board_write/edit.html)
+   ========================================= */
+
+.form-header {
+    border-bottom: 2px solid #e0e0e0; padding-bottom: 15px; margin-bottom: 30px;
+}
+.form-header h2 { margin: 0; color: #333; font-size: 22px; }
+.form-group { margin-bottom: 25px; }
+.form-group label { display: block; margin-bottom: 8px; font-size: 16px; font-weight: 500; color: #555; }
+.form-control {
+    width: 100%; padding: 12px; font-size: 15px; font-family: 'Noto Sans KR', sans-serif;
+    border: 1px solid #dcdcdc; border-radius: 5px; transition: border-color 0.3s;
+}
+.form-control:focus { outline: none; border-color: #007bff; box-shadow: 0 0 5px rgba(0,123,255,0.2); }
+textarea.form-control { height: 350px; resize: vertical; line-height: 1.7; }
+
+/* =========================================
+   9. 공통 버튼 스타일
+   ========================================= */
+
+.button-area {
+    text-align: center; padding-top: 20px; margin-top: 20px; border-top: 1px solid #f0f0f0;
+}
+.btn {
+    display: inline-block; padding: 10px 20px; font-size: 15px; font-weight: 500;
+    text-decoration: none; border-radius: 5px; transition: background-color 0.3s;
+    margin: 0 5px; border: none; cursor: pointer; font-family: 'Noto Sans KR', sans-serif;
+}
+.btn-write { background-color: #007bff; color: #ffffff; }
+.btn-write:hover { background-color: #0056b3; }
+.btn-list { background-color: #6c757d; color: #ffffff; }
+.btn-list:hover { background-color: #5a6268; }
+.btn-edit, .btn-submit { background-color: #007bff; color: #ffffff; }
+.btn-edit:hover, .btn-submit:hover { background-color: #0056b3; }
+.btn-delete { background-color: #dc3545; color: #ffffff; }
+.btn-delete:hover { background-color: #c82333; }
+.btn-cancel { background-color: #6c757d; color: #ffffff; }
+.btn-cancel:hover { background-color: #5a6268; }
+.inline-form { display: inline; }
+
+/* =========================================
+   10. 병원 찾기 (지도, 검색) 스타일 
+   ========================================= */
+
+/* (중복된 섹션 제목 주석 처리) */
+/* =========================================
+   10. 병원 찾기 (지도, 검색) 스타일 
+   ========================================= */
+
+.search-container { 
+    margin-bottom: 20px; display: flex; gap: 10px; 
+}
+.search-container input[type="text"] {
+    flex-grow: 1; padding: 12px; font-size: 15px; font-family: 'Noto Sans KR', sans-serif;
+    border: 1px solid #dcdcdc; border-radius: 5px; box-sizing: border-box; 
+}
+.search-container input[type="text"]:focus {
+    outline: none; border-color: #007bff; box-shadow: 0 0 5px rgba(0,123,255,0.2);
+}
+
+.map_wrap { position:relative; width:100%; height:500px; }
+#map { width: 100%; height: 500px; border-radius: 8px; margin-bottom: 20px; }
+
+
+.hospital-list:hover {
+	color:blue;
+	cursor: pointer;
+}
+
+/* 병원 목록 ul 스타일 */
+.hospital-list-items {
+    list-style: none; padding: 0; margin: 0; background: #fff;
+    border: 1px solid #e9e9e9; border-radius: 0 0 8px 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+.hospital-list-items li {
+    padding: 12px 15px; border-bottom: 1px solid #f0f0f0;
+}
+.hospital-list-items li:last-child { border-bottom: none; }
+/* 병원 목록 링크 기본 스타일 */
+/* 병원 목록 링크 기본 스타일 */
+.hospital-list-items li a {
+    font-weight: 500; /* 기존 폰트 굵기 (보통) */
+    transition: color 0.2s, text-decoration 0.2s, font-weight 0.2s; /* font-weight 전환 효과 추가 */
+}
+
+/* 병원 목록 링크 호버 스타일 */
+.hospital-list-items li a:hover {
+    color: #0056b3; 
+    text-decoration: underline; 
+    font-weight: bold; /* <-- 이 줄을 추가하세요! */
+} 
+.hospital-list-items li span {
+    font-size: 14px; 
+    color: #777;
+}
+
+/* 카카오맵 인포윈도우 스타일 */
+.info-window-content { 
+    padding: 10px; width: 250px; font-size: 12px; line-height: 1.5; 
+    border: 1px solid #ccc; background-color: white; border-radius: 4px; 
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2); position: relative; 
+}
+.info-window-content .title { font-size: 14px; font-weight: bold; margin-bottom: 5px; color: #333; }
+.info-window-content .address { color: #666; margin-bottom: 5px; }
+.info-window-content .phone { color: #009900; margin-bottom: 8px; }
+.info-window-content .links a { color: #007bff; text-decoration: none; margin-right: 8px; font-size: 11px; }
+.info-window-content .links a:hover { text-decoration: underline; }
+.info-window-content .close-btn { 
+    position: absolute; top: 5px; right: 5px; width: 15px; height: 15px; 
+    background: url('//t1.kakaocdn.net/localimg/localimages/07/mapapidoc/overlay_close.png') no-repeat; 
+    border: none; cursor: pointer; padding: 0;
+}
+
+.top-hospital-list {
+    /* list-style-type: decimal; */ /* 1. 기본 숫자 제거 */
+    list-style-type: none;      /* 기본 마커(숫자) 숨기기 */
+    padding-left: 0;            /* 기본 들여쓰기 제거 */
+    counter-reset: hospital-rank; /* 'hospital-rank' 카운터 초기화 */
+    margin-top: 10px;
+    font-size: 16px;
+    line-height: 1.8;
+}
+.top-hospital-list li {
+    margin-bottom: 8px;
+    counter-increment: hospital-rank; /* 각 li마다 카운터 1씩 증가 */
+    position: relative; /* ::before 위치 기준 */
+    padding-left: 35px; /* "N위:" 텍스트 들어갈 공간 확보 */
+}
+/* 각 li 앞에 "N위:" 텍스트 추가 */
+.top-hospital-list li::before {
+    content: counter(hospital-rank) "위:"; /* 카운터 값 + "위:" 표시 */
+    position: absolute; /* li 기준 위치 지정 */
+    left: 0;
+    font-weight: bold; /* 순위 글자 굵게 */
+    color: #555;      /* 순위 글자 색상 */
+    width: 30px;      /* 너비 고정 (정렬) */
+    text-align: left;
+}
+/* --- 안내 문구 스타일 --- */
+.welcome-section {
+    margin-bottom: 30px; /* 아래 내용과 간격 */
+    padding-bottom: 20px; /* 구분선 위 간격 */
+    border-bottom: 1px solid #eee; /* 구분선 */
+    line-height: 1.7; /* 줄 간격 */
+    font-size: 16px; /* 기본 글자 크기 */
+    color: #555; /* 약간 부드러운 글자색 */
+}
+.welcome-section h3 { /* 환영 메시지 스타일 */
+    font-size: 20px;
+    color: #333;
+    margin-bottom: 10px;
+}
+.welcome-section ul { /* 기능 목록 스타일 */
+    list-style: none; /* 기본 점 제거 */
+    padding-left: 0;
+    margin-top: 15px;
+}
+.welcome-section ul li {
+    margin-bottom: 5px;
+    padding-left: 20px; /* 아이콘/텍스트 들여쓰기 */
+    position: relative;
+}
+.welcome-section ul li::before { /* 각 목록 앞에 아이콘 추가 */
+    content: '✓'; /* 체크 아이콘 (다른 아이콘 가능: •, ➤ 등) */
+    position: absolute;
+    left: 0;
+    color: #007bff; /* 아이콘 색상 */
+    font-weight: bold;
+}
+ .welcome-section .closing-remark { /* 마무리 문구 스타일 */
+     margin-top: 15px;
+     font-weight: 500;
+ }
+ /* --- 인기 병원 목록 스타일 (기존 코드) --- */
+.top-hospital-list {
+    list-style-type: none;      
+    padding-left: 0;            
+    counter-reset: hospital-rank; 
+    margin-top: 10px;
+    font-size: 16px;
+    line-height: 1.8;
+}
+.top-hospital-list li {
+    margin-bottom: 20px; 
+    counter-increment: hospital-rank; 
+    position: relative; 
+    padding-left: 35px; 
+}
+.top-hospital-list li::before {
+    content: counter(hospital-rank) "위:"; 
+    position: absolute; 
+    left: 0;
+    font-weight: bold; 
+    color: #555;      
+    width: 30px;      
+    text-align: left;
+}
+.top-hospital-list li img {
+    display: block; 
+    max-width: 90%; 
+    height: 120px;  
+    object-fit: cover; 
+    margin-top: 10px; 
+    border-radius: 6px; 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+}
+/* 마이페이지 컨테이너 (흰색 카드) */
+.mypage-container {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    padding: 35px 40px; /* 내부 여백 */
+    max-width: 800px; /* 최대 너비 설정 (선택 사항) */
+    margin: 40px auto; /* 페이지 중앙 정렬 */
+}
+
+/* 마이페이지 제목 */
+.mypage-header h2 {
+    font-size: 24px;
+    color: #333;
+    margin: 0 0 25px 0; /* 아래쪽 여백 */
+    padding-bottom: 15px; /* 구분선 위 여백 */
+    border-bottom: 2px solid #e0e0e0; /* 구분선 */
+}
+
+/* 정보 항목 그룹 (라벨 + 값) */
+.info-group {
+    margin-bottom: 18px; /* 각 항목 사이 간격 */
+    display: flex; /* 라벨과 값을 가로로 배치 */
+    align-items: center; /* 세로 중앙 정렬 */
+    font-size: 16px;
+}
+
+/* 정보 라벨 (예: 아이디:, 이름:) */
+.info-label {
+    width: 150px; /* 라벨 너비 고정 (정렬) */
+    font-weight: 500;
+    color: #555;
+    flex-shrink: 0; /* 너비 줄어들지 않게 */
+}
+
+/* 정보 값 (예: testuser, 박수현) */
+.info-value {
+    color: #333;
+    word-break: break-all; /* 긴 값이 넘칠 경우 줄바꿈 */
+}
+
+/* 구분선 (선택 사항) */
+.mypage-divider {
+    border: 0;
+    height: 1px;
+    background-color: #f0f0f0;
+    margin: 30px 0; /* 위아래 여백 */
+}
+
+/* 회원 정보 수정 버튼 등 (선택 사항) */
+.mypage-actions {
+    margin-top: 30px;
+    text-align: right; /* 버튼 오른쪽 정렬 */
+}
+/* [수정] 파일 맨 끝의 추가 닫는 괄호 삭제됨 */

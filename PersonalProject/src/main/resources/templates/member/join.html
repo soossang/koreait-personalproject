@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>회원가입</title>
+</head>
+<body>
+<div layout:fragment="content"> <div class="form-container">
+        <div class="form-header">
+            <h2>회원가입</h2>
+        </div>
+
+        <form th:action="@{/member/join}" method="post" th:object="${memberDTO}">
+            <div class="form-group">
+                <label>가입 유형:</label>
+                <div>
+                    <input type="radio" id="user" th:field="*{role}" value="USER" checked  onchange="toggleInputFields()">
+                    <label for="user">일반 회원</label>
+                    <input type="radio" id="hospital" th:field="*{role}" value="HOSPITAL"  onchange="toggleInputFields()">
+                    <label for="hospital">병원 회원</label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="username">아이디:</label>
+                <input type="text" id="username" th:field="*{username}" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">비밀번호:</label>
+                <input type="password" id="password" th:field="*{password}" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password-confirm">비밀번호 확인:</label>
+                <input type="password" id="password-confirm" class="form-control" required>
+                <span id="password-message" style="color:red; font-size: 13px;"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="name">이름:</label>
+                <input type="text" id="name" th:field="*{name}" class="form-control" required>
+            </div>
+
+            <div id="nickname-field" class="form-group">
+                <label for="nickname">닉네임:</label>
+                <input type="text" id="nickname" th:field="*{nickname}" class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label for="email">이메일:</label>
+                <input type="email" id="email" th:field="*{email}" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label for="adminCode">관리자 등록 코드 (선택)</label>
+                <input type="text" id="adminCode" th:field="*{adminCode}" class="form-control"
+                       placeholder="관리자만 입력하세요">
+                <small style="color: #888; font-size: 13px;">일반 회원은 비워두시면 됩니다.</small>
+            </div>
+
+            <div class="button-area">
+                <button type="submit" class="btn btn-submit">가입하기</button>
+            </div>
+        </form>
+        <p style="text-align: center; margin-top: 20px;">이미 계정이 있으신가요? <a th:href="@{/member/login}" style="color:#007bff; font-weight:bold;">로그인</a></p>
+    </div>
+</div>
+
+<th:block layout:fragment="script">
+    <script>
+        // 비밀번호 확인 로직
+        const passwordInput = document.getElementById('password');
+        const confirmInput = document.getElementById('password-confirm');
+        const messageSpan = document.getElementById('password-message');
+
+        function checkPasswordMatch() {
+            if (passwordInput.value === confirmInput.value) {
+                messageSpan.textContent = '';
+                confirmInput.setCustomValidity(''); // 유효성 통과
+            } else {
+                messageSpan.textContent = '비밀번호가 일치하지 않습니다.';
+                confirmInput.setCustomValidity('비밀번호 불일치'); // 폼 제출 방지
+            }
+        }
+        passwordInput.addEventListener('input', checkPasswordMatch);
+        confirmInput.addEventListener('input', checkPasswordMatch);
+
+        // 닉네임 필드 토글 로직
+        function toggleInputFields() {
+            const nicknameField = document.getElementById('nickname-field');
+            const nicknameInput = document.getElementById('nickname');
+            const userRadio = document.getElementById('user'); // ID로 정확히 찾기
+
+            if (userRadio.checked) { // userRadio가 존재하는지 확인
+                nicknameField.style.display = 'block';
+                nicknameInput.required = true;
+            } else {
+                nicknameField.style.display = 'none';
+                nicknameInput.required = false;
+                nicknameInput.value = ''; // 병원 회원 선택 시 닉네임 초기화 (선택)
+            }
+        }
+        document.querySelectorAll('#user').addEventListener('change', toggleInputFields());
+        
+        document.addEventListener('DOMContentLoaded', toggleInputFields());
+    </script>
+</th:block>
+
+</body>
+</html>

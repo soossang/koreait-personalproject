@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.koreait.PsnProject.dao.LikeDAO">
+
+    <!-- 좋아요 추가 -->
+    <insert id="insertLike" parameterType="com.koreait.PsnProject.dto.LikeDTO">
+        INSERT INTO like_hospital (hospital_id, member_id, liked)
+        VALUES (#{hospitalId}, #{memberId}, #{liked})
+    </insert>
+
+    <!-- 좋아요 취소 -->
+    <delete id="deleteLike" parameterType="com.koreait.PsnProject.dto.LikeDTO">
+        DELETE FROM like_hospital WHERE hospital_id = #{hospitalId} AND member_id = #{memberId}
+    </delete>
+
+    <!-- 좋아요 개수 조회 -->
+    <select id="countLikes" parameterType="int" resultType="int">
+        SELECT COUNT(*) FROM like_hospital WHERE hospital_id = #{hospitalId} AND liked = TRUE
+    </select>
+
+</mapper>

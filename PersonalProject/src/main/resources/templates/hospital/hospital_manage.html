@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>병원 정보 관리</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    
+</head>
+<body>
+<div th:replace="~{fragments/header :: header}"></div>
+
+<div class="container">
+    <h2>내 병원 정보 관리</h2>
+
+    <div th:if="${successMessage}" style="color: green; margin-bottom: 15px;">
+        <p th:text="${successMessage}"></p>
+    </div>
+
+    <form th:action="@{/hospital/manage}" method="post" th:object="${hospital}">
+        <input type="hidden" th:field="*{id}" />
+        <input type="hidden" th:field="*{memberId}" />
+
+        <div class="form-group">
+            <label for="hospitalName">병원 이름:</label>
+            <input type="text" id="hospitalName" th:field="*{hospitalName}" required>
+        </div>
+        <div class="form-group">
+            <label for="address">주소:</label>
+            <input type="text" id="address" th:field="*{address}" required>
+        </div>
+        <div class="form-group">
+            <label for="department">진료 과목 (쉼표로 구분):</label>
+            <input type="text" id="department" th:field="*{department}">
+        </div>
+        <div class="form-group">
+            <label for="phone">전화번호:</label>
+            <input type="text" id="phone" th:field="*{phone}">
+        </div>
+        <div class="form-group">
+            <label for="doctorCount">의료진 수:</label>
+            <input type="number" id="doctorCount" th:field="*{doctorCount}">
+        </div>
+        <div class="form-group">
+            <label for="description">병원 소개:</label>
+            <textarea id="description" th:field="*{description}"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="latitude">위도 (지도 표시용):</label>
+            <input type="number" step="any" id="latitude" th:field="*{latitude}" placeholder="예: 36.3533">
+        </div>
+        <div class="form-group">
+            <label for="longitude">경도 (지도 표시용):</label>
+            <input type="number" step="any" id="longitude" th:field="*{longitude}" placeholder="예: 127.3781">
+        </div>
+
+        <button type="submit" class="btn">정보 저장/수정</button>
+    </form>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

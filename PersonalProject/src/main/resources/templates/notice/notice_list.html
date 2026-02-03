@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" layout:decorate="~{layout}">
+<head>
+    <title>공지사항</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="board-container">
+
+        <div class="board-header">
+            <h2>공지사항</h2>
+            <a th:href="@{/notice/write}" class="btn btn-write" sec:authorize="hasAuthority('ADMIN')">글쓰기</a>
+        </div>
+
+        <table class="board-table">
+            <thead>
+                <tr>
+                    <th class="col-id" style="width: 15%;">번호</th> <th class="col-title" style="width: 65%;">제목</th> <th class="col-date" style="width: 20%;">작성일</th> </tr>
+            </thead>
+            <tbody>
+                <tr th:if="${#lists.isEmpty(notices)}">
+                    <td colspan="3" style="text-align: center; padding: 50px; color: #888;"> 등록된 공지사항이 없습니다.
+                    </td>
+                </tr>
+                <tr th:each="notice : ${notices}">
+                    <td class="col-id" th:text="${notice.id}">1</td>
+                    <td class="col-title">
+                        <a th:href="@{/notice/detail/{id}(id=${notice.id})}"
+                           th:text="${notice.title}"
+                           class="board-title-link"> 공지사항 제목입니다.
+                        </a>
+                    </td>
+                    <td class="col-date"
+                        th:text="${#temporals.format(notice.createdAt, 'yyyy-MM-dd')}">
+                        2025-10-24
+                    </td>
+                    </tr>
+            </tbody>
+        </table>
+        </div>
+</div>
+</body>
+</html>

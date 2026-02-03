@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.koreait.PsnProject.dao.BookmarkDAO">
+
+    <insert id="insertBookmark" parameterType="com.koreait.PsnProject.dto.BookmarkDTO">
+        INSERT INTO like_hospital (hospital_id, member_id, bookmarked)
+        VALUES (#{hospitalId}, #{memberId}, #{bookmarked})
+    </insert>
+
+    <delete id="deleteBookmark" parameterType="com.koreait.PsnProject.dto.BookmarkDTO">
+        DELETE FROM like_hospital WHERE hospital_id = #{hospitalId} AND member_id = #{memberId}
+    </delete>
+
+    <select id="getBookmarksByMember" parameterType="int" resultType="com.koreait.PsnProject.dto.HospitalDTO">
+        SELECT h.*
+        FROM like_hospital l
+        JOIN hospital h ON l.hospital_id = h.id
+        WHERE l.member_id = #{memberId} AND l.bookmarked = TRUE
+    </select>
+
+</mapper>

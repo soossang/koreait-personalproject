@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+
+<head>
+    <title>대전 병원 공유 게시판 - 메인</title>
+    <th:block layout:fragment="css">
+        <style>
+            /* --- 안내 문구 스타일 --- */
+            .welcome-section { margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid #eee; line-height: 1.7; font-size: 16px; color: #555; }
+            .welcome-section h3 { font-size: 20px; color: #333; margin-bottom: 10px; }
+            .welcome-section ul { list-style: none; padding-left: 0; margin-top: 15px; }
+            .welcome-section ul li { margin-bottom: 5px; padding-left: 20px; position: relative; }
+            .welcome-section ul li::before { content: '✓'; position: absolute; left: 0; color: #007bff; font-weight: bold; }
+            .welcome-section .closing-remark { margin-top: 15px; font-weight: 500; }
+
+            /* --- 인기 병원 목록 스타일 --- */
+            .top-hospital-list { list-style-type: none; padding-left: 0; counter-reset: hospital-rank; margin-top: 10px; font-size: 16px; line-height: 1.8; }
+            .top-hospital-list li { margin-bottom: 20px; counter-increment: hospital-rank; position: relative; padding-left: 35px; }
+            .top-hospital-list li::before { content: counter(hospital-rank) "위:"; position: absolute; left: 0; font-weight: bold; color: #555; width: 30px; text-align: left; }
+            .top-hospital-list li img { display: block; max-width: 90%; height: 120px; object-fit: cover; margin-top: 10px; border-radius: 6px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); }
+
+			/* --- ▼▼▼ 랭크별 색상 추가 ▼▼▼ --- */
+            .top-hospital-list li:nth-child(1) { color: #DAA520; } /* 1위: 금색 (Goldenrod) */
+            .top-hospital-list li:nth-child(2) { color: #C0C0C0; } /* 2위: 은색 (Silver) */
+            .top-hospital-list li:nth-child(3) { color: #CD7F32; } /* 3위: 동색 (Bronze) */
+            /* --- ▲▲▲ 랭크별 색상 추가 끝 ▲▲▲ --- */
+            /* --- 이용 규칙 및 안내 스타일 --- */
+            .info-section { margin-top: 30px; padding: 20px; background-color: #f9f9f9; border-radius: 6px; font-size: 15px; color: #666; }
+            .info-section h4 { font-size: 17px; color: #444; margin-top: 0; margin-bottom: 10px; }
+            .info-section ul { list-style: disc; padding-left: 20px; margin-top: 5px; }
+            .info-section ul li { margin-bottom: 5px; }
+            .disclaimer { margin-top: 15px; font-weight: 500; color: #d9534f; }
+
+            /* --- ▼▼▼ 유용한 정보 스타일 추가 ▼▼▼ --- */
+            .useful-info-section {
+                margin-top: 15px; /* 위 섹션과 간격 */
+                padding: 20px;
+                background-color: #eef7ff; /* 연한 파란색 배경 */
+                border: 1px solid #cce5ff; /* 파란색 테두리 */
+                border-radius: 6px;
+                font-size: 15px;
+            }
+            .useful-info-section h4 {
+                font-size: 17px;
+                color: #004085; /* 진한 파란색 제목 */
+                margin-top: 0;
+                margin-bottom: 15px;
+            }
+            .useful-info-section ul {
+                list-style: none; /* 점 제거 */
+                padding-left: 0;
+            }
+            .useful-info-section ul li {
+                margin-bottom: 8px;
+                padding-left: 25px; /* 아이콘 공간 */
+                position: relative;
+            }
+            /* 응급 연락처 아이콘 */
+            .useful-info-section.emergency ul li::before {
+                content: '📞'; /* 전화기 아이콘 */
+                font-size: 16px;
+                position: absolute;
+                left: 0;
+                top: 1px;
+            }
+             /* 공공 보건 정보 아이콘 */
+            .useful-info-section.public-health ul li::before {
+                content: '🔗'; /* 링크 아이콘 */
+                font-size: 16px;
+                position: absolute;
+                left: 0;
+                top: 1px;
+            }
+            .useful-info-section a {
+                color: #0056b3; /* 링크 색상 */
+                font-weight: 500;
+            }
+            .useful-info-section a:hover {
+                text-decoration: underline;
+            }
+            .emergency-number { /* 119 강조 */
+                font-weight: bold;
+                color: #d9534f;
+                font-size: 1.1em;
+            }
+            /* --- ▲▲▲ 스타일 추가 끝 ▲▲▲ --- */
+
+        </style>
+    </th:block>
+</head>
+
+<body>
+    <div layout:fragment="content">
+
+        <div class="container" style="background-color: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);">
+
+            <div class="welcome-section">
+                <h3>🏥 대전 병원 공유 게시판에 오신 것을 환영합니다!</h3>
+                <p>이곳은 대전 지역의 병원들에 대한 <strong>솔직한 정보와 경험을 나누는 공간</strong>입니다.</p>
+                <ul>
+                    <li><strong>병원 찾기:</strong> 다양한 병원 정보를 찾아보세요.</li>
+                    <li><strong>리얼 후기:</strong> 직접 경험한 병원 후기를 남기거나 다른 사람들의 후기를 참고하세요.</li>
+                    <li><strong>자유 게시판:</strong> 병원 이용 팁이나 건강 관련 이야기를 자유롭게 나누세요.</li>
+                </ul>
+                <p class="closing-remark">여러분의 <strong>소중한 정보 공유</strong>가 더 나은 대전 의료 환경을 만드는 데 도움이 됩니다. 😊</p>
+            </div>
+
+            <h2>🏥 인기 병원 Top 3</h2>
+            <ol class="top-hospital-list">
+                <li> 연합이비인후과 <img th:src="@{/img/hospital_top1.png}" alt="연합이비인후과 사진"> </li>
+                <li> 해인한의원 <img th:src="@{/img/hospital_top2.png}" alt="해인한의원 사진"> </li>
+                <li> 중리치과의원 <img th:src="@{/img/hospital_top3.png}" alt="중리치과의원 사진"> </li>
+            </ol>
+
+            <div class="info-section">
+                <h4>📜 게시판 이용 규칙</h4>
+                <ul>
+                    <li>타인에 대한 비방이나 욕설은 삼가주세요.</li>
+                    <li>개인정보(전화번호, 주민번호 등) 노출에 주의해주세요.</li>
+                    <li>광고성 또는 불법적인 내용의 게시글은 삭제될 수 있습니다.</li>
+                    <li>서로 존중하며 건전한 커뮤니티를 만들어가요!</li>
+                </ul>
+            </div>
+
+            <div class="info-section" style="margin-top: 15px;">
+                <h4>⚠️ 병원 정보 활용 안내</h4>
+                <p>본 게시판에서 제공되는 병원 정보 및 후기는 사용자들의 경험을 바탕으로 하며, 참고용으로만 활용해 주시기 바랍니다.</p>
+                <p class="disclaimer"><strong>실제 진단 및 치료는 반드시 해당 병원 또는 의료 전문가와 직접 상담하시기 바랍니다.</strong></p>
+            </div>
+
+            <div class="useful-info-section emergency" style="margin-top: 15px;"> <h4>🚨 대전 응급 연락처</h4>
+                <ul>
+                    <li>응급 상황 발생 시: <span class="emergency-number">119</span> (통합)</li>
+                    <li>충남대학교병원 응급의료센터: 042-280-8129</li>
+                    <li>건양대학교병원 응급의료센터: 042-600-9119</li>
+                    <li>을지대학교병원 응급의료센터: 042-259-1119</li>
+                    <li>엠블병원 (야간/휴일 소아청소년과): 042-1899-3275</li>
+                </ul>
+            </div>
+
+            <div class="useful-info-section public-health" style="margin-top: 15px;"> <h4>🩺 공공 보건 정보</h4>
+                <ul>
+                    <li><a href="https://www.daejeon.go.kr/drh/acm/drhAcmBoardList.do?esbFieGbn=02&menuSeq=6414" target="_blank">대전광역시청 보건복지국</a></li>
+                    <li><a href="https://www.djcidc.or.kr/main/main.php" target="_blank">대전광역시 감염병관리지원단</a></li>
+                    <li><a href="https://www.kdca.go.kr" target="_blank">질병관리청</a></li>
+                    </ul>
+            </div>
+            <hr style="margin: 30px 0; border: 0; border-top: 1px solid #eee;">
+
+        </div>
+
+    </div>
+</body>
+</html>

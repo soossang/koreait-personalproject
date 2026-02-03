@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{layout}">
+<head>
+    <title th:text="${notice.title} + ' - 공지사항'"></title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="post-container">
+
+        <div class="post-header">
+            <h2 class="post-title" th:text="${notice.title}">공지사항 제목</h2>
+            <div class="post-meta">
+                <span th:text="'작성일: ' + ${#temporals.format(notice.createdAt, 'yyyy-MM-dd HH:mm')}"></span>
+                </div>
+        </div>
+
+        <div class="post-content" th:text="${notice.content}">
+            공지사항 내용입니다.
+        </div>
+
+        <div class="button-area">
+            <a th:href="@{/notice/list}" class="btn btn-list">목록으로</a>
+
+            <th:block sec:authorize="hasAuthority('ADMIN')">
+                <a th:href="@{/notice/edit/{id}(id=${notice.id})}" class="btn btn-edit">수정</a>
+                <form th:action="@{/notice/delete}" method="post" class="inline-form"
+                      onsubmit="return confirm('정말 삭제하시겠습니까?');">
+                    <input type="hidden" name="id" th:value="${notice.id}" />
+                    <button type="submit" class="btn btn-delete">삭제</button>
+                </form>
+            </th:block>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

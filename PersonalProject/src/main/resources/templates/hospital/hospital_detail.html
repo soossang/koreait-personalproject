@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>병원 상세 정보</title></head>
+<body>
+<div th:replace="fragments/header :: header"></div>
+
+<h2 th:text="${hospital.name}"></h2>
+<p th:text="${hospital.address}"></p>
+<p th:text="'전화번호: ' + ${hospital.phone}"></p>
+
+<button th:onclick="'likeHospital(' + ${hospital.id} + ')'">좋아요 ❤️</button>
+
+<h3>리뷰</h3>
+<div th:each="review : ${reviews}">
+    <p th:text="${review.writer} + ': ' + ${review.content}"></p>
+</div>
+
+<div th:replace="fragments/footer :: footer"></div>
+</body>
+</html>

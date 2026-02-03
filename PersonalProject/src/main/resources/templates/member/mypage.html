@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+
+<head>
+    <title>마이페이지</title>
+    </head>
+
+<body>
+<div layout:fragment="content">
+
+    <div class="mypage-container">
+
+        <div class="mypage-header">
+            <h2>마이페이지</h2>
+        </div>
+
+        <div th:if="${member != null}">
+            <div class="info-group">
+                <span class="info-label">아이디:</span>
+                <span class="info-value" th:text="${member.username}">testuser</span>
+            </div>
+
+            <div class="info-group">
+                <span class="info-label">이름:</span>
+                <span class="info-value" th:text="${member.name}">박수현</span>
+            </div>
+
+            <div class="info-group" th:if="${member.role == 'USER' and member.nickname != null}">
+                <span class="info-label">닉네임:</span>
+                <span class="info-value" th:text="${member.nickname}">park</span>
+            </div>
+
+            <div class="info-group" th:if="${member.role == 'HOSPITAL' and member.hospitalName != null}">
+                <span class="info-label">병원명:</span>
+                <span class="info-value" th:text="${member.hospitalName}">튼튼병원</span>
+            </div>
+            
+            <div class="info-group" th:if="${member.role == 'ADMIN'}">
+                <span class="info-label">회원 유형:</span>
+                <span class="info-value" style="color: #007bff; font-weight: bold;">관리자</span>
+            </div>
+
+            <div class="info-group">
+                <span class="info-label">이메일:</span>
+                <span class="info-value" th:text="${member.email}">soo@naver.com</span>
+            </div>
+
+            <hr class="mypage-divider">
+
+            <div class="mypage-actions">
+                </div>
+
+        </div>
+
+        <div th:if="${member == null or errorMessage != null}">
+            <p style="color: red; text-align: center; margin-top: 30px;"
+               th:text="${errorMessage != null ? errorMessage : '회원 정보를 불러오는 데 실패했습니다.'}">
+                오류 메시지
+            </p>
+        </div>
+
+    </div> </div>
+</body>
+</html>

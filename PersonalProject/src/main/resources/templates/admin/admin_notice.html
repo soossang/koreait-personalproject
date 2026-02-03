@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>공지 등록</title></head>
+<body>
+<div th:replace="fragments/header :: header"></div>
+
+<h2>공지사항 등록</h2>
+<form th:action="@{/admin/notice}" method="post">
+    <label>제목: <input type="text" name="title"></label><br>
+    <label>내용:<br><textarea name="content"></textarea></label><br>
+    <button type="submit">등록</button>
+</form>
+
+<div th:replace="fragments/footer :: footer"></div>
+</body>
+</html>
