@@ -17,7 +17,7 @@ public class BannerServiceImpl implements BannerService {
     @Override
     public List<BannerDTO> getTopBanners() {
         // ✅ findTopBanners() -> getTop3HospitalsByLikes()로 수정
-        return bannerDAO.getTop3HospitalsByLikes();
+    	return bannerDAO.getActiveBanners();
     }
 
     @Override
