@@ -23,4 +23,4 @@ public interface BannerDAO {
     // 배너 삭제
     int deleteBanner(@Param("id") Long id);
 
-}
+}	
