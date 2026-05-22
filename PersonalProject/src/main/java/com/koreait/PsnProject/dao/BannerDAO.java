@@ -23,6 +23,4 @@ public interface BannerDAO {
     // 배너 삭제
     int deleteBanner(@Param("id") Long id);
 
-    // 좋아요 수 기준 top3 병원 조회 (광고용)
-    List<BannerDTO> getTop3HospitalsByLikes();
-}
+}	

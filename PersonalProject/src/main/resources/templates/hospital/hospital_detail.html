@@ -8,8 +8,6 @@
 <p th:text="${hospital.address}"></p>
 <p th:text="'전화번호: ' + ${hospital.phone}"></p>
 
-<button th:onclick="'likeHospital(' + ${hospital.id} + ')'">좋아요 ❤️</button>
-
 <div th:replace="fragments/footer :: footer"></div>
 </body>
 </html>
