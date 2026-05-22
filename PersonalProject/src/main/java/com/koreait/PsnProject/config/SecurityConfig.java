@@ -75,17 +75,19 @@ public class SecurityConfig {
                 System.out.println("[Security Config] authorizeHttpRequests 설정 중...");
                 auth
                     // ... (기존 경로 권한 설정 동일)
-                    .requestMatchers("/", "/css/**", "/js/**", "/img/**", "/uploads/**").permitAll()
-                    .requestMatchers("/member/join", "/member/login").permitAll()
-                    .requestMatchers("/hospital/list", "/hospital/detail/**").permitAll()
-                    .requestMatchers("/notice/**").permitAll()
-                    .requestMatchers("/api/**").permitAll()
-                    .requestMatchers("/board/list", "/board/detail/**").permitAll()
-                    .requestMatchers("/board/write").authenticated()
-                    .requestMatchers("/member/mypage", "/member/edit").authenticated()
-                    .requestMatchers("/hospital/manage").hasAuthority("HOSPITAL")
-                    .requestMatchers("/admin/**").hasAuthority("ADMIN") // "ADMIN" 권한 확인
-                    .anyRequest().permitAll();
+                .requestMatchers("/", "/css/**", "/js/**", "/img/**", "/uploads/**").permitAll()
+                .requestMatchers("/member/join", "/member/login").permitAll()
+                .requestMatchers("/hospital/list", "/hospital/detail/**").permitAll()
+
+                .requestMatchers("/notice/write", "/notice/edit", "/notice/edit/**", "/notice/delete").hasAuthority("ADMIN")
+                .requestMatchers("/notice/**").permitAll()
+
+                .requestMatchers("/api/**").permitAll()
+                .requestMatchers("/board/list", "/board/detail/**").permitAll()
+                .requestMatchers("/board/write").authenticated()
+                .requestMatchers("/member/mypage", "/member/edit").authenticated()
+                .requestMatchers("/hospital/manage").hasAuthority("HOSPITAL")
+                .anyRequest().permitAll();
             })
             .formLogin(form -> {
                 System.out.println("[Security Config] formLogin 설정 중...");

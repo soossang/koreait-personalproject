@@ -23,8 +23,7 @@ public class MemberController {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-
-    // application.properties에서 관리자 코드 값 주입
+    
     @Value("${admin.registration.code}")
     private String secretAdminCode;
 
