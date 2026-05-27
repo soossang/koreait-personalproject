@@ -20,7 +20,7 @@ public class BoardServiceImpl implements BoardService {
         // 나중에 페이징 기능 구현 시 이 부분을 수정해야 합니다.
         return boardDAO.getBoardList(0, 10); // 예: 첫 페이지 10개
     }
-
+    
     @Override
     public BoardDTO getPostById(Long id) {
         // ✅ findById() -> getBoardById() 로 수정
