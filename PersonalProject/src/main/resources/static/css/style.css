@@ -1,517 +1,864 @@
-/* =========================================
-   1. 글로벌 기본 설정 (초기화 및 공통)
-   ========================================= */
+/* =========================================================
+   1. 글로벌 기본 설정
+   - 전체 페이지의 기본 여백, 폰트, 배경색, 링크 스타일
+   ========================================================= */
 
-/* 기본 스타일 초기화 */
-body, html, h1, h2, h3, p, ul, li, form, input, textarea, button {
+/* 기본 여백 초기화 */
+html,
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+ul,
+li,
+form,
+input,
+textarea,
+button {
     margin: 0;
     padding: 0;
-    box-sizing: border-box; 
+    box-sizing: border-box;
 }
 
-/* body, html 기본 폰트 및 배경색 설정 */
-html, body {
+/* pseudo-element까지 box-sizing 통일 */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+/* 전체 페이지 기본 설정 */
+html,
+body {
     font-family: 'Noto Sans KR', sans-serif;
-    background-color: #f4f7f6; 
+    background-color: #f4f7f6;
     color: #333;
     line-height: 1.6;
-    margin: 0;
-    padding: 0;
 }
 
-/* 고정 헤더로 인해 본문이 가려지지 않도록 body에 상단 패딩 추가 */
+/* 고정 헤더 때문에 본문이 가려지지 않도록 여백 추가 */
 body {
-    padding-top: 80px; 
+    padding-top: 80px;
 }
 
 /* 공통 링크 스타일 */
 a {
+    color: inherit;
     text-decoration: none;
-    color: inherit; 
 }
 
 a:hover {
-	color: blue;
-	font-weight: bold;
+    color: #007bff;
+    font-weight: bold;
 }
-/* =========================================
-   2. 헤더 (fragments/header.html)
-   ========================================= */
+
+
+/* =========================================================
+   2. 헤더 영역
+   - fragments/header.html
+   ========================================================= */
 
 .main-header {
-    background-color: #ffffff; 
-    border-bottom: 1px solid #eaeaea; 
-    padding: 0 5%; 
     position: fixed;
-    top: 0; left: 0; right: 0;
-    height: 80px; 
+    top: 0;
+    left: 0;
+    right: 0;
     z-index: 1000;
+
+    height: 80px;
+    padding: 0 5%;
+
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05); 
+    justify-content: space-between;
+
+    background-color: #ffffff;
+    border-bottom: 1px solid #eaeaea;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 }
 
+/* 로고 영역 */
 .logo-area {
     display: flex;
-    align-items: center; 
-    text-decoration: none !important; 
+    align-items: center;
+    text-decoration: none !important;
 }
 
 .logo-icon {
-    font-size: 32px; 
     margin-right: 12px;
+    font-size: 32px;
 }
 
 .logo-title {
-    font-family: 'Noto Sans KR', sans-serif; 
+    margin: 0;
+    color: #007bff;
     font-size: 24px;
     font-weight: 700;
-    color: #007bff; 
-    margin: 0; 
-    text-decoration: none; 
+    text-decoration: none;
 }
 
+/* 상단 메뉴 */
 .main-nav ul {
-    margin: 0; padding: 0; list-style: none; 
-}
-.main-nav li {
-    display: inline-block; 
-    margin-left: 30px; 
-}
-.main-nav li a {
-    text-decoration: none; color: #555; 
-    font-size: 17px; font-weight: 500;
-    padding-bottom: 5px; 
-    transition: color 0.3s, border-color 0.3s;
-    border-bottom: 2px solid transparent; 
-}
-.main-nav li a:hover {
-    color: #007bff; border-bottom-color: #007bff; 
-}
-.main-nav li.nav-auth a {
-     color: #007bff; font-weight: 700;
-}
-.main-nav li.nav-auth a:hover {
-     color: #0056b3; border-bottom-color: #0056b3;
+    margin: 0;
+    padding: 0;
+    list-style: none;
 }
 
-/* =========================================
-   3. 푸터 (fragments/footer.html)
-   ========================================= */
+.main-nav li {
+    display: inline-block;
+    margin-left: 30px;
+}
+
+.main-nav li a {
+    padding-bottom: 5px;
+
+    color: #555;
+    font-size: 17px;
+    font-weight: 500;
+    text-decoration: none;
+
+    border-bottom: 2px solid transparent;
+    transition: color 0.3s, border-color 0.3s;
+}
+
+.main-nav li a:hover {
+    color: #007bff;
+    border-bottom-color: #007bff;
+}
+
+/* 로그인 / 로그아웃 메뉴 */
+.main-nav li.nav-auth a {
+    color: #007bff;
+    font-weight: 700;
+}
+
+.main-nav li.nav-auth a:hover {
+    color: #0056b3;
+    border-bottom-color: #0056b3;
+}
+
+
+/* =========================================================
+   3. 푸터 영역
+   - fragments/footer.html
+   ========================================================= */
 
 footer {
-    text-align: center; padding: 20px;
-    margin-top: 30px; background: #333; color: #fff;
+    margin-top: 30px;
+    padding: 20px;
+
+    color: #ffffff;
+    text-align: center;
+
+    background-color: #333333;
 }
 
-/* =========================================
-   4. 메인 컨텐츠 영역 (layout.html)
-   ========================================= */
+
+/* =========================================================
+   4. 공통 레이아웃
+   - layout.html
+   ========================================================= */
 
 .container {
-    width: 90%; max-width: 1100px; 
-    margin: 40px auto; 
-    padding: 0; 
+    width: 90%;
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 0;
 }
 
-/* =========================================
-   5. 게시판 공통 컨테이너 (흰색 카드)
-   ========================================= */
-
+/* 흰색 카드형 컨테이너 */
 .board-container,
 .post-container,
-.form-container {
-    background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    padding: 30px 35px;
-}
-
-/* =========================================
-   6. 게시판 목록 (board_list.html)
-   ========================================= */
-
-.board-header {
-    display: flex; justify-content: space-between; align-items: center;
-    border-bottom: 2px solid #e0e0e0; padding-bottom: 15px; margin-bottom: 20px;
-}
-.board-header h2 {
-    margin: 0; color: #333; font-size: 22px;
-}
-
-.board-table {
-    width: 100%; border-collapse: collapse; font-size: 15px;
-}
-.board-table th, .board-table td {
-    padding: 14px 10px; border-bottom: 1px solid #e9e9e9; text-align: left;
-}
-.board-table th {
-    background-color: #f9f9f9; color: #555; font-weight: 700; border-top: 2px solid #f0f0f0;
-}
-.col-id, .col-date { text-align: center; color: #777; width: 10%; }
-.col-author { text-align: center; color: #555; width: 15%; }
-.col-title { width: 55%; }
-.board-title-link { text-decoration: none; color: #007bff; font-weight: 500; }
-.board-title-link:hover { text-decoration: underline; }
-.board-table tbody tr:hover { background-color: #fcfcfc; }
-
-/* =========================================
-   7. 게시판 상세 (board_detail.html)
-   ========================================= */
-
-.post-header {
-    border-bottom: 2px solid #f0f0f0; padding-bottom: 20px; margin-bottom: 30px;
-}
-.post-title {
-    font-size: 28px; font-weight: 700; color: #222; margin: 0 0 15px 0;
-}
-.post-meta { font-size: 14px; color: #888; }
-.post-meta span { margin-right: 15px; }
-.post-content {
-    min-height: 250px; font-size: 16px; line-height: 1.8; 
-    color: #444; padding-bottom: 30px; white-space: pre-wrap; 
-}
-
-/* =========================================
-   8. 글쓰기/수정 (board_write/edit.html)
-   ========================================= */
-
-.form-header {
-    border-bottom: 2px solid #e0e0e0; padding-bottom: 15px; margin-bottom: 30px;
-}
-.form-header h2 { margin: 0; color: #333; font-size: 22px; }
-.form-group { margin-bottom: 25px; }
-.form-group label { display: block; margin-bottom: 8px; font-size: 16px; font-weight: 500; color: #555; }
-.form-control {
-    width: 100%; padding: 12px; font-size: 15px; font-family: 'Noto Sans KR', sans-serif;
-    border: 1px solid #dcdcdc; border-radius: 5px; transition: border-color 0.3s;
-}
-.form-control:focus { outline: none; border-color: #007bff; box-shadow: 0 0 5px rgba(0,123,255,0.2); }
-textarea.form-control { height: 350px; resize: vertical; line-height: 1.7; }
-
-/* =========================================
-   9. 공통 버튼 스타일
-   ========================================= */
-
-.button-area {
-    text-align: center; padding-top: 20px; margin-top: 20px; border-top: 1px solid #f0f0f0;
-}
-.btn {
-    display: inline-block; padding: 10px 20px; font-size: 15px; font-weight: 500;
-    text-decoration: none; border-radius: 5px; transition: background-color 0.3s;
-    margin: 0 5px; border: none; cursor: pointer; font-family: 'Noto Sans KR', sans-serif;
-}
-.btn-write { background-color: #007bff; color: #ffffff; }
-.btn-write:hover { background-color: #0056b3; }
-.btn-list { background-color: #6c757d; color: #ffffff; }
-.btn-list:hover { background-color: #5a6268; }
-.btn-edit, .btn-submit { background-color: #007bff; color: #ffffff; }
-.btn-edit:hover, .btn-submit:hover { background-color: #0056b3; }
-.btn-delete { background-color: #dc3545; color: #ffffff; }
-.btn-delete:hover { background-color: #c82333; }
-.btn-cancel { background-color: #6c757d; color: #ffffff; }
-.btn-cancel:hover { background-color: #5a6268; }
-.inline-form { display: inline; }
-
-/* =========================================
-   10. 병원 찾기 (지도, 검색) 스타일 
-   ========================================= */
-
-/* (중복된 섹션 제목 주석 처리) */
-/* =========================================
-   10. 병원 찾기 (지도, 검색) 스타일 
-   ========================================= */
-
-.search-container { 
-    margin-bottom: 20px; display: flex; gap: 10px; 
-}
-.search-container input[type="text"] {
-    flex-grow: 1; padding: 12px; font-size: 15px; font-family: 'Noto Sans KR', sans-serif;
-    border: 1px solid #dcdcdc; border-radius: 5px; box-sizing: border-box; 
-}
-.search-container input[type="text"]:focus {
-    outline: none; border-color: #007bff; box-shadow: 0 0 5px rgba(0,123,255,0.2);
-}
-
-.map_wrap { position:relative; width:100%; height:500px; }
-#map { width: 100%; height: 500px; border-radius: 8px; margin-bottom: 20px; }
-
-
-.hospital-list:hover {
-	color:blue;
-	cursor: pointer;
-}
-
-/* 병원 목록 ul 스타일 */
-.hospital-list-items {
-    list-style: none; padding: 0; margin: 0; background: #fff;
-    border: 1px solid #e9e9e9; border-radius: 0 0 8px 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
-}
-.hospital-list-items li {
-    padding: 12px 15px; border-bottom: 1px solid #f0f0f0;
-}
-.hospital-list-items li:last-child { border-bottom: none; }
-/* 병원 목록 링크 기본 스타일 */
-/* 병원 목록 링크 기본 스타일 */
-.hospital-list-items li a {
-    font-weight: 500; /* 기존 폰트 굵기 (보통) */
-    transition: color 0.2s, text-decoration 0.2s, font-weight 0.2s; /* font-weight 전환 효과 추가 */
-}
-
-/* 병원 목록 링크 호버 스타일 */
-.hospital-list-items li a:hover {
-    color: #0056b3; 
-    text-decoration: underline; 
-    font-weight: bold; /* <-- 이 줄을 추가하세요! */
-} 
-.hospital-list-items li span {
-    font-size: 14px; 
-    color: #777;
-}
-
-/* 카카오맵 인포윈도우 스타일 */
-.info-window-content { 
-    padding: 10px; width: 250px; font-size: 12px; line-height: 1.5; 
-    border: 1px solid #ccc; background-color: white; border-radius: 4px; 
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2); position: relative; 
-}
-.info-window-content .title { font-size: 14px; font-weight: bold; margin-bottom: 5px; color: #333; }
-.info-window-content .address { color: #666; margin-bottom: 5px; }
-.info-window-content .phone { color: #009900; margin-bottom: 8px; }
-.info-window-content .links a { color: #007bff; text-decoration: none; margin-right: 8px; font-size: 11px; }
-.info-window-content .links a:hover { text-decoration: underline; }
-.info-window-content .close-btn { 
-    position: absolute; top: 5px; right: 5px; width: 15px; height: 15px; 
-    background: url('//t1.kakaocdn.net/localimg/localimages/07/mapapidoc/overlay_close.png') no-repeat; 
-    border: none; cursor: pointer; padding: 0;
-}
-
-.top-hospital-list {
-    /* list-style-type: decimal; */ /* 1. 기본 숫자 제거 */
-    list-style-type: none;      /* 기본 마커(숫자) 숨기기 */
-    padding-left: 0;            /* 기본 들여쓰기 제거 */
-    counter-reset: hospital-rank; /* 'hospital-rank' 카운터 초기화 */
-    margin-top: 10px;
-    font-size: 16px;
-    line-height: 1.8;
-}
-.top-hospital-list li {
-    margin-bottom: 8px;
-    counter-increment: hospital-rank; /* 각 li마다 카운터 1씩 증가 */
-    position: relative; /* ::before 위치 기준 */
-    padding-left: 35px; /* "N위:" 텍스트 들어갈 공간 확보 */
-}
-/* 각 li 앞에 "N위:" 텍스트 추가 */
-.top-hospital-list li::before {
-    content: counter(hospital-rank) "위:"; /* 카운터 값 + "위:" 표시 */
-    position: absolute; /* li 기준 위치 지정 */
-    left: 0;
-    font-weight: bold; /* 순위 글자 굵게 */
-    color: #555;      /* 순위 글자 색상 */
-    width: 30px;      /* 너비 고정 (정렬) */
-    text-align: left;
-}
-/* --- 안내 문구 스타일 --- */
-.welcome-section {
-    margin-bottom: 30px; /* 아래 내용과 간격 */
-    padding-bottom: 20px; /* 구분선 위 간격 */
-    border-bottom: 1px solid #eee; /* 구분선 */
-    line-height: 1.7; /* 줄 간격 */
-    font-size: 16px; /* 기본 글자 크기 */
-    color: #555; /* 약간 부드러운 글자색 */
-}
-.welcome-section h3 { /* 환영 메시지 스타일 */
-    font-size: 20px;
-    color: #333;
-    margin-bottom: 10px;
-}
-.welcome-section ul { /* 기능 목록 스타일 */
-    list-style: none; /* 기본 점 제거 */
-    padding-left: 0;
-    margin-top: 15px;
-}
-.welcome-section ul li {
-    margin-bottom: 5px;
-    padding-left: 20px; /* 아이콘/텍스트 들여쓰기 */
-    position: relative;
-}
-.welcome-section ul li::before { /* 각 목록 앞에 아이콘 추가 */
-    content: '✓'; /* 체크 아이콘 (다른 아이콘 가능: •, ➤ 등) */
-    position: absolute;
-    left: 0;
-    color: #007bff; /* 아이콘 색상 */
-    font-weight: bold;
-}
- .welcome-section .closing-remark { /* 마무리 문구 스타일 */
-     margin-top: 15px;
-     font-weight: 500;
- }
- /* --- 인기 병원 목록 스타일 (기존 코드) --- */
-.top-hospital-list {
-    list-style-type: none;      
-    padding-left: 0;            
-    counter-reset: hospital-rank; 
-    margin-top: 10px;
-    font-size: 16px;
-    line-height: 1.8;
-}
-.top-hospital-list li {
-    margin-bottom: 20px; 
-    counter-increment: hospital-rank; 
-    position: relative; 
-    padding-left: 35px; 
-}
-.top-hospital-list li::before {
-    content: counter(hospital-rank) "위:"; 
-    position: absolute; 
-    left: 0;
-    font-weight: bold; 
-    color: #555;      
-    width: 30px;      
-    text-align: left;
-}
-.top-hospital-list li img {
-    display: block; 
-    max-width: 90%; 
-    height: 120px;  
-    object-fit: cover; 
-    margin-top: 10px; 
-    border-radius: 6px; 
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
-}
-/* 마이페이지 컨테이너 (흰색 카드) */
+.form-container,
 .mypage-container {
     background-color: #ffffff;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    padding: 35px 40px; /* 내부 여백 */
-    max-width: 800px; /* 최대 너비 설정 (선택 사항) */
-    margin: 40px auto; /* 페이지 중앙 정렬 */
+}
+
+
+/* =========================================================
+   5. 게시판 목록
+   - board_list.html
+   ========================================================= */
+
+.board-container {
+    padding: 30px 35px;
+}
+
+.board-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.board-header h2 {
+    margin: 0;
+    color: #333;
+    font-size: 22px;
+}
+
+.board-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 15px;
+}
+
+.board-table th,
+.board-table td {
+    padding: 14px 10px;
+    text-align: left;
+    border-bottom: 1px solid #e9e9e9;
+}
+
+.board-table th {
+    color: #555;
+    font-weight: 700;
+    background-color: #f9f9f9;
+    border-top: 2px solid #f0f0f0;
+}
+
+.board-table tbody tr:hover {
+    background-color: #fcfcfc;
+}
+
+/* 게시판 컬럼 */
+.col-id,
+.col-date {
+    width: 10%;
+    color: #777;
+    text-align: center;
+}
+
+.col-author {
+    width: 15%;
+    color: #555;
+    text-align: center;
+}
+
+.col-title {
+    width: 55%;
+}
+
+/* 게시글 제목 링크 */
+.board-title-link {
+    color: #007bff;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.board-title-link:hover {
+    text-decoration: underline;
+}
+
+
+/* =========================================================
+   6. 게시판 상세
+   - board_detail.html
+   ========================================================= */
+
+.post-container {
+    padding: 30px 35px;
+}
+
+.post-header {
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+.post-title {
+    margin: 0 0 15px;
+    color: #222;
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.post-meta {
+    color: #888;
+    font-size: 14px;
+}
+
+.post-meta span {
+    margin-right: 15px;
+}
+
+.post-content {
+    min-height: 250px;
+    padding-bottom: 30px;
+
+    color: #444;
+    font-size: 16px;
+    line-height: 1.8;
+    white-space: pre-wrap;
+}
+
+
+/* =========================================================
+   7. 글쓰기 / 수정 / 회원가입 / 병원관리 폼
+   - board_write.html
+   - board_edit.html
+   - join.html
+   - hospital_manage.html
+   ========================================================= */
+
+.form-container {
+    padding: 30px 35px;
+}
+
+.form-header {
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.form-header h2 {
+    margin: 0;
+    color: #333;
+    font-size: 22px;
+}
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+
+    color: #555;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.form-control,
+.form-group input[type="text"],
+.form-group input[type="password"],
+.form-group input[type="email"],
+.form-group input[type="number"],
+.form-group textarea {
+    width: 100%;
+    padding: 12px;
+
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 15px;
+
+    border: 1px solid #dcdcdc;
+    border-radius: 5px;
+
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-control:focus,
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.2);
+}
+
+textarea.form-control,
+.form-group textarea {
+    min-height: 180px;
+    line-height: 1.7;
+    resize: vertical;
+}
+
+/* 게시글 작성/수정 페이지의 긴 textarea */
+form textarea#content {
+    min-height: 350px;
+}
+
+
+/* =========================================================
+   8. 공통 버튼
+   ========================================================= */
+
+.button-area {
+    margin-top: 20px;
+    padding-top: 20px;
+
+    text-align: center;
+    border-top: 1px solid #f0f0f0;
+}
+
+.btn {
+    display: inline-block;
+    margin: 0 5px;
+    padding: 10px 20px;
+
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    text-decoration: none;
+
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+
+    transition: background-color 0.3s;
+}
+
+.btn:hover {
+    color: #ffffff;
+    font-weight: 500;
+}
+
+.btn-write,
+.btn-edit,
+.btn-submit {
+    color: #ffffff;
+    background-color: #007bff;
+}
+
+.btn-write:hover,
+.btn-edit:hover,
+.btn-submit:hover {
+    background-color: #0056b3;
+}
+
+.btn-list,
+.btn-cancel {
+    color: #ffffff;
+    background-color: #6c757d;
+}
+
+.btn-list:hover,
+.btn-cancel:hover {
+    background-color: #5a6268;
+}
+
+.btn-delete {
+    color: #ffffff;
+    background-color: #dc3545;
+}
+
+.btn-delete:hover {
+    background-color: #c82333;
+}
+
+/* form을 버튼처럼 한 줄에 배치할 때 사용 */
+.inline-form {
+    display: inline;
+}
+
+
+/* =========================================================
+   9. 병원 찾기
+   - hospital_list.html
+   ========================================================= */
+
+/* 검색 영역 */
+.search-container {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.search-container input[type="text"] {
+    flex-grow: 1;
+    padding: 12px;
+
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 15px;
+
+    border: 1px solid #dcdcdc;
+    border-radius: 5px;
+}
+
+.search-container input[type="text"]:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.2);
+}
+
+/* 카카오 지도 영역 */
+.map_wrap,
+#map {
+    position: relative;
+    width: 100%;
+    height: 500px;
+}
+
+#map {
+    margin-bottom: 20px;
+    border-radius: 8px;
+}
+
+/* 병원 목록 */
+#hospitalList,
+.hospital-list-items {
+    margin: 0;
+    padding: 0;
+
+    list-style: none;
+    background-color: #ffffff;
+    border: 1px solid #e9e9e9;
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+#hospitalList li,
+.hospital-list-items li {
+    padding: 12px 15px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+#hospitalList li:last-child,
+.hospital-list-items li:last-child {
+    border-bottom: none;
+}
+
+.hospital-list {
+    font-weight: 500;
+    transition: color 0.2s, text-decoration 0.2s, font-weight 0.2s;
+}
+
+.hospital-list:hover {
+    color: #0056b3;
+    font-weight: bold;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.hospital-list span,
+.hospital-list-items li span {
+    color: #777;
+    font-size: 14px;
+}
+
+/* 카카오맵 인포윈도우 */
+.info-window-content {
+    position: relative;
+
+    width: 250px;
+    padding: 10px;
+
+    font-size: 12px;
+    line-height: 1.5;
+
+    background-color: #ffffff;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.info-window-content .title {
+    margin-bottom: 5px;
+    color: #333;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.info-window-content .address {
+    margin-bottom: 5px;
+    color: #666;
+}
+
+.info-window-content .phone {
+    margin-bottom: 8px;
+    color: #009900;
+}
+
+.info-window-content .links a {
+    margin-right: 8px;
+    color: #007bff;
+    font-size: 11px;
+    text-decoration: none;
+}
+
+.info-window-content .links a:hover {
+    text-decoration: underline;
+}
+
+.info-window-content .close-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+
+    width: 15px;
+    height: 15px;
+    padding: 0;
+
+    cursor: pointer;
+    border: none;
+    background: url('//t1.kakaocdn.net/localimg/localimages/07/mapapidoc/overlay_close.png') no-repeat;
+}
+
+
+/* =========================================================
+   10. 메인 페이지
+   - index.html
+   ========================================================= */
+
+/* 환영 문구 */
+.welcome-section {
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+
+    color: #555;
+    font-size: 16px;
+    line-height: 1.7;
+
+    border-bottom: 1px solid #eeeeee;
+}
+
+.welcome-section h3 {
+    margin-bottom: 10px;
+    color: #333;
+    font-size: 20px;
+}
+
+.welcome-section ul {
+    margin-top: 15px;
+    padding-left: 0;
+    list-style: none;
+}
+
+.welcome-section ul li {
+    position: relative;
+    margin-bottom: 5px;
+    padding-left: 20px;
+}
+
+.welcome-section ul li::before {
+    content: '✓';
+
+    position: absolute;
+    left: 0;
+
+    color: #007bff;
+    font-weight: bold;
+}
+
+.welcome-section .closing-remark {
+    margin-top: 15px;
+    font-weight: 500;
+}
+
+/* 인기 병원 Top 3 */
+.top-hospital-list {
+    margin-top: 10px;
+    padding-left: 0;
+
+    font-size: 16px;
+    line-height: 1.8;
+
+    list-style-type: none;
+    counter-reset: hospital-rank;
+}
+
+.top-hospital-list li {
+    position: relative;
+
+    margin-bottom: 20px;
+    padding-left: 35px;
+
+    counter-increment: hospital-rank;
+}
+
+.top-hospital-list li::before {
+    content: counter(hospital-rank) "위:";
+
+    position: absolute;
+    left: 0;
+
+    width: 30px;
+
+    color: #555;
+    font-weight: bold;
+    text-align: left;
+}
+
+.top-hospital-list li img {
+    display: block;
+
+    max-width: 90%;
+    height: 120px;
+    margin-top: 10px;
+
+    object-fit: cover;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* 순위별 색상 */
+.top-hospital-list li:nth-child(1) {
+    color: #daa520; /* 1위: 금색 */
+}
+
+.top-hospital-list li:nth-child(2) {
+    color: #c0c0c0; /* 2위: 은색 */
+}
+
+.top-hospital-list li:nth-child(3) {
+    color: #cd7f32; /* 3위: 동색 */
+}
+
+/* 게시판 이용 규칙 / 안내 */
+.info-section {
+    margin-top: 30px;
+    padding: 20px;
+
+    color: #666;
+    font-size: 15px;
+
+    background-color: #f9f9f9;
+    border-radius: 6px;
+}
+
+.info-section h4 {
+    margin-top: 0;
+    margin-bottom: 10px;
+
+    color: #444;
+    font-size: 17px;
+}
+
+.info-section ul {
+    margin-top: 5px;
+    padding-left: 20px;
+    list-style: disc;
+}
+
+.info-section ul li {
+    margin-bottom: 5px;
+}
+
+.disclaimer {
+    margin-top: 15px;
+    color: #d9534f;
+    font-weight: 500;
+}
+
+/* 유용한 정보 */
+.useful-info-section {
+    margin-top: 15px;
+    padding: 20px;
+
+    font-size: 15px;
+
+    background-color: #eef7ff;
+    border: 1px solid #cce5ff;
+    border-radius: 6px;
+}
+
+.useful-info-section h4 {
+    margin-top: 0;
+    margin-bottom: 15px;
+
+    color: #004085;
+    font-size: 17px;
+}
+
+.useful-info-section ul {
+    padding-left: 0;
+    list-style: none;
+}
+
+.useful-info-section ul li {
+    position: relative;
+
+    margin-bottom: 8px;
+    padding-left: 25px;
+}
+
+.useful-info-section.emergency ul li::before {
+    content: '📞';
+
+    position: absolute;
+    top: 1px;
+    left: 0;
+
+    font-size: 16px;
+}
+
+.useful-info-section.public-health ul li::before {
+    content: '🔗';
+
+    position: absolute;
+    top: 1px;
+    left: 0;
+
+    font-size: 16px;
+}
+
+.useful-info-section a {
+    color: #0056b3;
+    font-weight: 500;
+}
+
+.useful-info-section a:hover {
+    text-decoration: underline;
+}
+
+.emergency-number {
+    color: #d9534f;
+    font-size: 1.1em;
+    font-weight: bold;
+}
+
+
+/* =========================================================
+   11. 마이페이지
+   - mypage.html
+   ========================================================= */
+
+.mypage-container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 35px 40px;
 }
 
 /* 마이페이지 제목 */
 .mypage-header h2 {
-    font-size: 24px;
+    margin: 0 0 25px;
+    padding-bottom: 15px;
+
     color: #333;
-    margin: 0 0 25px 0; /* 아래쪽 여백 */
-    padding-bottom: 15px; /* 구분선 위 여백 */
-    border-bottom: 2px solid #e0e0e0; /* 구분선 */
+    font-size: 24px;
+
+    border-bottom: 2px solid #e0e0e0;
 }
 
-/* 정보 항목 그룹 (라벨 + 값) */
+/* 정보 항목 */
 .info-group {
-    margin-bottom: 18px; /* 각 항목 사이 간격 */
-    display: flex; /* 라벨과 값을 가로로 배치 */
-    align-items: center; /* 세로 중앙 정렬 */
+    display: flex;
+    align-items: center;
+
+    margin-bottom: 18px;
     font-size: 16px;
 }
 
-/* 정보 라벨 (예: 아이디:, 이름:) */
 .info-label {
-    width: 150px; /* 라벨 너비 고정 (정렬) */
-    font-weight: 500;
+    flex-shrink: 0;
+    width: 150px;
+
     color: #555;
-    flex-shrink: 0; /* 너비 줄어들지 않게 */
+    font-weight: 500;
 }
 
-/* 정보 값 (예: testuser, 박수현) */
 .info-value {
     color: #333;
-    word-break: break-all; /* 긴 값이 넘칠 경우 줄바꿈 */
+    word-break: break-all;
 }
 
-/* 구분선 (선택 사항) */
 .mypage-divider {
-    border: 0;
     height: 1px;
+    margin: 30px 0;
+
     background-color: #f0f0f0;
-    margin: 30px 0; /* 위아래 여백 */
+    border: 0;
 }
 
-/* 회원 정보 수정 버튼 등 (선택 사항) */
 .mypage-actions {
     margin-top: 30px;
-    text-align: right; /* 버튼 오른쪽 정렬 */
+    text-align: right;
 }
-/* [수정] 파일 맨 끝의 추가 닫는 괄호 삭제됨 */
-
-.welcome-section { margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid #eee; line-height: 1.7; font-size: 16px; color: #555; }
-.welcome-section h3 { font-size: 20px; color: #333; margin-bottom: 10px; }
-.welcome-section ul { list-style: none; padding-left: 0; margin-top: 15px; }
-.welcome-section ul li { margin-bottom: 5px; padding-left: 20px; position: relative; }
-.welcome-section ul li::before { content: '✓'; position: absolute; left: 0; color: #007bff; font-weight: bold; }
-.welcome-section .closing-remark { margin-top: 15px; font-weight: 500; }
-
-/* --- 인기 병원 목록 스타일 --- */
-.top-hospital-list { list-style-type: none; padding-left: 0; counter-reset: hospital-rank; margin-top: 10px; font-size: 16px; line-height: 1.8; }
-.top-hospital-list li { margin-bottom: 20px; counter-increment: hospital-rank; position: relative; padding-left: 35px; }
-.top-hospital-list li::before { content: counter(hospital-rank) "위:"; position: absolute; left: 0; font-weight: bold; color: #555; width: 30px; text-align: left; }
-.top-hospital-list li img { display: block; max-width: 90%; height: 120px; object-fit: cover; margin-top: 10px; border-radius: 6px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); }
-
-/* --- ▼▼▼ 랭크별 색상 추가 ▼▼▼ --- */
-.top-hospital-list li:nth-child(1) { color: #DAA520; } /* 1위: 금색 (Goldenrod) */
-.top-hospital-list li:nth-child(2) { color: #C0C0C0; } /* 2위: 은색 (Silver) */
-.top-hospital-list li:nth-child(3) { color: #CD7F32; } /* 3위: 동색 (Bronze) */
-/* --- ▲▲▲ 랭크별 색상 추가 끝 ▲▲▲ --- */
-/* --- 이용 규칙 및 안내 스타일 --- */
-.info-section { margin-top: 30px; padding: 20px; background-color: #f9f9f9; border-radius: 6px; font-size: 15px; color: #666; }
-.info-section h4 { font-size: 17px; color: #444; margin-top: 0; margin-bottom: 10px; }
-.info-section ul { list-style: disc; padding-left: 20px; margin-top: 5px; }
-.info-section ul li { margin-bottom: 5px; }
-.disclaimer { margin-top: 15px; font-weight: 500; color: #d9534f; }
-
-/* --- ▼▼▼ 유용한 정보 스타일 추가 ▼▼▼ --- */
-.useful-info-section {
-    margin-top: 15px; /* 위 섹션과 간격 */
-    padding: 20px;
-    background-color: #eef7ff; /* 연한 파란색 배경 */
-    border: 1px solid #cce5ff; /* 파란색 테두리 */
-    border-radius: 6px;
-    font-size: 15px;
-}
-.useful-info-section h4 {
-    font-size: 17px;
-    color: #004085; /* 진한 파란색 제목 */
-    margin-top: 0;
-    margin-bottom: 15px;
-}
-.useful-info-section ul {
-    list-style: none; /* 점 제거 */
-    padding-left: 0;
-}
-.useful-info-section ul li {
-    margin-bottom: 8px;
-    padding-left: 25px; /* 아이콘 공간 */
-    position: relative;
-}
-/* 응급 연락처 아이콘 */
-.useful-info-section.emergency ul li::before {
-    content: '📞'; /* 전화기 아이콘 */
-    font-size: 16px;
-    position: absolute;
-    left: 0;
-    top: 1px;
-}
- /* 공공 보건 정보 아이콘 */
-.useful-info-section.public-health ul li::before {
-    content: '🔗'; /* 링크 아이콘 */
-    font-size: 16px;
-    position: absolute;
-    left: 0;
-    top: 1px;
-}
-.useful-info-section a {
-    color: #0056b3; /* 링크 색상 */
-    font-weight: 500;
-}
-.useful-info-section a:hover {
-    text-decoration: underline;
-}
-.emergency-number { /* 119 강조 */
-    font-weight: bold;
-    color: #d9534f;
-    font-size: 1.1em;
-}
-/* --- ▲▲▲ 스타일 추가 끝 ▲▲▲ --- */

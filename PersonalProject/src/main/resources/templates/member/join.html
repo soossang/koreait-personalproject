@@ -16,9 +16,9 @@
             <div class="form-group">
                 <label>가입 유형:</label>
                 <div>
-                    <input type="radio" id="user" th:field="*{role}" value="USER" checked  onchange="toggleInputFields()">
+                    <input type="radio" id="user" th:field="*{role}" value="USER" checked>
                     <label for="user">일반 회원</label>
-                    <input type="radio" id="hospital" th:field="*{role}" value="HOSPITAL"  onchange="toggleInputFields()">
+                    <input type="radio" id="hospital" th:field="*{role}" value="HOSPITAL">
                     <label for="hospital">병원 회원</label>
                 </div>
             </div>
@@ -70,43 +70,7 @@
 </div>
 
 <th:block layout:fragment="script">
-    <script>
-        // 비밀번호 확인 로직
-        const passwordInput = document.getElementById('password');
-        const confirmInput = document.getElementById('password-confirm');
-        const messageSpan = document.getElementById('password-message');
-
-        function checkPasswordMatch() {
-            if (passwordInput.value === confirmInput.value) {
-                messageSpan.textContent = '';
-                confirmInput.setCustomValidity(''); // 유효성 통과
-            } else {
-                messageSpan.textContent = '비밀번호가 일치하지 않습니다.';
-                confirmInput.setCustomValidity('비밀번호 불일치'); // 폼 제출 방지
-            }
-        }
-        passwordInput.addEventListener('input', checkPasswordMatch);
-        confirmInput.addEventListener('input', checkPasswordMatch);
-
-        // 닉네임 필드 토글 로직
-        function toggleInputFields() {
-            const nicknameField = document.getElementById('nickname-field');
-            const nicknameInput = document.getElementById('nickname');
-            const userRadio = document.getElementById('user'); // ID로 정확히 찾기
-
-            if (userRadio.checked) { // userRadio가 존재하는지 확인
-                nicknameField.style.display = 'block';
-                nicknameInput.required = true;
-            } else {
-                nicknameField.style.display = 'none';
-                nicknameInput.required = false;
-                nicknameInput.value = ''; // 병원 회원 선택 시 닉네임 초기화 (선택)
-            }
-        }
-        document.querySelectorAll('#user').addEventListener('change', toggleInputFields());
-        
-        document.addEventListener('DOMContentLoaded', toggleInputFields());
-    </script>
+    <script th:src="@{/js/join.js}"></script>
 </th:block>
 
 </body>
